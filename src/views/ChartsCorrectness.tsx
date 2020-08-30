@@ -1,19 +1,20 @@
 import React from 'react';
 import { Pie } from "react-chartjs-2";
-import axios from "axios";
+import { observer, inject, } from 'mobx-react';
+import { AppStore } from '../stores/AppStore';
 
-export default class WykresyPoprawnosci extends React.Component<{}, { pieData: any[] }> {
+@observer
+@inject("appStore")
+export default class WykresyPoprawnosci extends React.Component<{appStore: AppStore}, { pieData: any[] }> {
     state = {
         pieData: []
     }
 
 
     async componentDidMount() {
-        const response = await axios.get("http://localhost:3091/compares");
-        const compares: any[] = response.data;
-
-        const response2 = await axios.get("http://localhost:3091/algorithms");
-        const algorithms: any[] = response2.data;
+        console.log(this.props.appStore);
+        const compares: any[] = this.props.appStore.compares;
+        const algorithms: any[] = this.props.appStore.algorithms;
 
         let pieData: any[] = [];
 
@@ -51,7 +52,7 @@ export default class WykresyPoprawnosci extends React.Component<{}, { pieData: a
 
     }
     render() {
-        return (<div style={{display:"flex",flexDirection:"row", flexWrap: "wrap"}}>
+        return (<div style={{display:"flex",flexDirection:"row", flexWrap: "wrap", justifyContent: "center"}}>
             {this.state.pieData.map((props, index) => {
                 return (<div key={index.toString()} style={{width:200, height:200, padding:20}}>
                     <Pie key={index.toString()} {...props} width={200} height={200}/>

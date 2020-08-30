@@ -4,15 +4,15 @@ import { LinkProps } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Button = styled.button`
-    height: 100px;
+    height: 70px;
     width: 25%;
-    background-color: gray;
-    border: 0;
-    padding: 0;
+    background-color: #808080;
+    border: 0px;
+    padding: 0px;
     font-size: 12px;
     text-decoration: none;
     &:hover{
-        background-color: white;
+        background-color: #80808099;
         color: black;
     }
 `;

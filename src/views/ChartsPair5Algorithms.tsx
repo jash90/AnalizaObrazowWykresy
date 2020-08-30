@@ -2,19 +2,20 @@ import React from 'react';
 import { Bar } from "react-chartjs-2";
 import axios from "axios";
 import Utils from '../Utils';
+import { observer, inject } from 'mobx-react';
+import { AppStore } from '../stores/AppStore';
 
-export default class ChartsPair5Algorithms extends React.Component<{}, { barData: {} }> {
+@observer
+@inject("appStore")
+export default class ChartsPair5Algorithms extends React.Component<{appStore: AppStore}, { barData: {} }> {
     state = {
         barData: {}
     }
 
 
     async componentDidMount() {
-        const response = await axios.get("http://localhost:3091/compares");
-        const compares: any[] = response.data;
-
-        const response2 = await axios.get("http://localhost:3091/algorithms");
-        const algorithms: any[] = response2.data;
+        const compares: any[] = this.props.appStore.compares;
+        const algorithms: any[] = this.props.appStore.algorithms;
 
         let algorithmsCorrects = [];
         var allCompares = 0;

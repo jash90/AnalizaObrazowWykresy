@@ -25,7 +25,6 @@ const Title = styled.span`
 const Navigation = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: flex - end;
     width: 100%;
 `;
 

@@ -2,19 +2,23 @@ import React from 'react';
 import { Bar } from "react-chartjs-2";
 import axios from "axios";
 import Utils from '../Utils';
+import { AppStore } from '../stores/AppStore';
+import { observer, inject } from 'mobx-react';
 
-export default class ChartsPairAlgorithms extends React.Component<{}, { barData: {} }> {
+@observer
+@inject("appStore")
+export default class ChartsPairAlgorithms extends React.Component<{ appStore: AppStore }, { barData: {} }> {
     state = {
         barData: {}
     }
 
 
     async componentDidMount() {
-        const response = await axios.get("http://localhost:3091/compares");
-        const compares: any[] = response.data;
 
-        const response2 = await axios.get("http://localhost:3091/algorithms");
-        const algorithms: any[] = response2.data;
+        const compares: any[] = this.props.appStore.compares;
+        const algorithms: any[] = this.props.appStore.algorithms;
+
+        console.log(compares, algorithms);
 
         let algorithmsCorrects = [];
         var allCompares = 0;
@@ -45,11 +49,12 @@ export default class ChartsPairAlgorithms extends React.Component<{}, { barData:
                     label: "Poprównanie procentowej wszystkich najlepszych algorymów",
                     data: corrects,
                     backgroundColor: backgroundColors,
-                    hoverBackgroundColor: backgroundColors.map(color=> color+"99")
+                    hoverBackgroundColor: backgroundColors.map(color => color + "99")
                 }]
             }
         });
     }
+
     render() {
         return (
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
