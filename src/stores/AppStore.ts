@@ -1,28 +1,31 @@
 import { observable, action, } from 'mobx'
-
+import Algorithm from '../models/Algorithm';
+import Image from '../models/Image';
+import Similarity from '../models/Similarity';
+import Compare from '../models/Compare';
 export class AppStore {
-    algorithms = observable([]);
-    compares = observable([]);
-    images = observable([]);
-    similarities = observable([]);
+    algorithms:Algorithm[] = observable([]);
+    compares:Compare[] = observable([]);
+    images:Image[] = observable([]);
+    similarities:Similarity[] = observable([]);
 
     @action
-    setAlgorithms(algorithms: any) {
+    setAlgorithms(algorithms:Algorithm[]) {
         this.algorithms = algorithms;
     }
 
     @action
-    setImages(images: any) {
+    setImages(images:Image[]) {
         this.images = images;
     }
 
     @action
-    setCompares(compares: any) {
+    setCompares(compares: Compare[]) {
         this.compares = compares;
     }
 
     @action
-    setSimilarities(similarities: any) {
+    setSimilarities(similarities: Similarity[]) {
         this.similarities = similarities;
     }
 }

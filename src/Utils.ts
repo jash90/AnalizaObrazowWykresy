@@ -1,5 +1,8 @@
 import appStore from "./stores/AppStore";
-
+import Algorithm from "./models/Algorithm";
+import Compare from "./models/Compare";
+import Image from "./models/Image";
+import Similarity from "./models/Similarity";
 export default class Utils {
 
     public static generateRandomColor() {
@@ -265,7 +268,7 @@ export default class Utils {
     }
 
     public static generateArrayRandomColor(number: number) {
-        let array: any[] = [];
+        let array: string[] = [];
         while (array.length < number) {
             const color = Utils.generateRandomColor();
             if (!array.includes(color))
@@ -274,14 +277,29 @@ export default class Utils {
         return array;
     }
 
+    public static calculateAlgorithmsCorrects() {
+        const { algorithms, compares } = appStore;
+
+        let algorithmsCorrects = [];
+
+        for (let i = 0; i < algorithms.length; i++) {
+            const algorithm: Algorithm = algorithms[i];
+            const algorithmCompares = compares.filter((compare: Compare) => compare.versionAlgorithmId === algorithm.id);
+            const correct = algorithmCompares.filter((compare: Compare) => compare.correct === true).length;
+            const incorrect = algorithmCompares.filter((compare: Compare) => compare.correct === false).length;
+            algorithmsCorrects.push({ name: algorithm.name, correct, incorrect, id: algorithm.id });
+        }
+        return algorithmsCorrects;
+    }
+
     public static calculateDataToCharts(slice = false) {
         const { compares } = appStore;
 
-        var allCompares = compares.filter((compare: any) => compare.versionAlgorithmId === '1').length;
+        var allCompares = compares.filter((compare: Compare) => compare.versionAlgorithmId === '1').length;
 
         const algorithmsCorrects = Utils.calculateAlgorithmsCorrects();
 
-        var filteredAlgorithms = algorithmsCorrects.map(algorithm => { return { correct: algorithm.correct, name: algorithm.name } }).sort((a, b) => { return b.correct - a.correct });
+        var filteredAlgorithms = algorithmsCorrects.map((algorithm: any) => { return { correct: algorithm.correct, name: algorithm.name } }).sort((a, b) => { return b.correct - a.correct });
 
         if (slice)
             filteredAlgorithms = filteredAlgorithms.slice(0, 5);
@@ -292,48 +310,34 @@ export default class Utils {
         return { labels, corrects };
     }
 
-    public static calculateAlgorithmsCorrects() {
-        const { algorithms, compares } = appStore;
-
-        let algorithmsCorrects = [];
-
-        for (let i = 0; i < algorithms.length; i++) {
-            const algorithm: any = algorithms[i];
-            const algorithmCompares = compares.filter((compare: any) => compare.versionAlgorithmId === algorithm.id);
-            const correct = algorithmCompares.filter((compare: any) => compare.correct === true).length;
-            const incorrect = algorithmCompares.filter((compare: any) => compare.correct === false).length;
-            algorithmsCorrects.push({ name: algorithm.name, correct, incorrect, id: algorithm.id });
-        }
-        return algorithmsCorrects;
-    }
-
-    public static calculateChartsPairAlgorithms(image1: any, image2: any, slice = false) {
+    public static calculateChartsPairAlgorithms(image1: Image[], image2: Image[], slice = false) {
         if (image1.length > 0 && image2.length > 0) {
 
-            image1 = image1[0];
+            var img1: Image = image1[0];
 
-            image2 = image2[0];
+            var img2: Image = image2[0];
 
             const algorithmsLabels: any = Utils.calculateDataToCharts(slice);
 
-            const algorithmsIds = algorithmsLabels.labels.map((algorithm: any) => {
-                const alm: any = appStore.algorithms.find((am: any) => {
+            const algorithmsIds = algorithmsLabels.labels.map((algorithm: string) => {
+                const alm: Algorithm|undefined = appStore.algorithms.find((am: Algorithm) => {
                     return am.name === algorithm
                 });
                 return !!alm ? alm.id : 0;
             });
 
-            var similarities: any[] = [];
+            var compares: Compare[] = [];
 
             for (let i = 0; i < algorithmsIds.length; i++) {
-                const id = algorithmsIds[i];
-                const compare = appStore.compares.find((compare: any) => {
-                    return compare.versionAlgorithmId === id && ((compare.imageId === image2.id || compare.imageId === image1.id) && (compare.secondImageId === image2.id || compare.secondImageId === image1.id));
+                const id: string = algorithmsIds[i];
+                const compare = appStore.compares.find((compare: Compare) => {
+                    return compare.versionAlgorithmId === id && ((compare.imageId === img1.id || compare.imageId === img2.id) && (compare.secondImageId === img2.id || compare.secondImageId === img1.id));
                 })
-                similarities.push(compare);
+                if (!!compare)
+                    compares.push(compare);
             }
 
-            similarities = similarities.map((compare: any) => compare.similarity)
+            var similarities:number[] = compares.map((compare: Compare) => compare.similarity)
 
             return { labels: algorithmsLabels.labels, similarities };
         }
@@ -343,13 +347,13 @@ export default class Utils {
     }
 
     public static getSimilaritiesResult() {
-        return appStore.similarities.map((similarity:any) => {
-            const image = appStore.images.find((image: any) => image.id === similarity.imageId);
-            const secondImage = appStore.images.find((image: any) => image.id === similarity.secondImageId);
-            var compares = appStore.compares.filter((compare: any) => {
+        return appStore.similarities.map((similarity: Similarity) => {
+            const image = appStore.images.find((image: Image) => image.id === similarity.imageId);
+            const secondImage = appStore.images.find((image: Image) => image.id === similarity.secondImageId);
+            var compares = appStore.compares.filter((compare: Compare) => {
                 return (compare.imageId === similarity.imageId || compare.imageId === similarity.secondImageId) && (compare.secondImageId === similarity.imageId || compare.secondImageId === similarity.secondImageId)
-            }).map((compare: any) => {
-                const algorithm = appStore.algorithms.find((algorithm: any) => algorithm.id === compare.versionAlgorithmId);
+            }).map((compare: Compare) => {
+                const algorithm = appStore.algorithms.find((algorithm: Algorithm) => algorithm.id === compare.versionAlgorithmId);
                 return { ...compare, algorithm }
             })
 
@@ -358,11 +362,11 @@ export default class Utils {
 
     }
 
-    public static getImages(value: any): any[] {
+    public static getImages(value: Image[]): Image[] {
         if (value?.length) {
             const id = Number(value[0]?.id);
             if (id > 0) {
-                return appStore.images.filter((image: any) => {
+                return appStore.images.filter((image: Image) => {
                     return Number(image.id) !== id;
                 })
             } else return appStore.images;

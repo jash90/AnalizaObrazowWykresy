@@ -1,7 +1,6 @@
 import React from 'react';
 import { Pie } from "react-chartjs-2";
-import { observer, inject, } from 'mobx-react';
-import { AppStore } from '../stores/AppStore';
+import { observer, } from 'mobx-react';
 import Utils from '../Utils';
 import { Container } from '../components/StyledComponents';
 import styled from 'styled-components';
@@ -12,16 +11,17 @@ const PieContainer = styled.div`
     padding: 20px;
 `;
 
+interface State {
+    pieData: any[]
+}
 @observer
-@inject("appStore")
-export default class WykresyPoprawnosci extends React.Component<{ appStore: AppStore }, { pieData: any[] }> {
+export default class WykresyPoprawnosci extends React.Component<{}, State> {
     state = {
         pieData: []
     }
 
 
     async componentDidMount() {
-        
         var pieData: any[] = [];
 
         const algorithmsCompares = Utils.calculateAlgorithmsCorrects();

@@ -1,25 +1,20 @@
 import React from 'react';
 import { Bar } from "react-chartjs-2";
 import Utils from '../Utils';
-import { observer, inject } from 'mobx-react';
-import { AppStore } from '../stores/AppStore';
+import { observer } from 'mobx-react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import ResultPair5Algorithms from '../components/ResultPair5Algorithms';
 import { ChartContainer, Container, InputContainer } from '../components/StyledComponents';
-
-interface Props {
-    appStore: AppStore
-}
+import Image from '../models/Image';
 
 interface State {
     barData: any
-    image1: any[]
-    image2: any[]
+    image1: Image[]
+    image2: Image[]
 }
 
 @observer
-@inject("appStore")
-export default class ChartsPair5Algorithms extends React.Component<Props, State> {
+export default class ChartsPair5Algorithms extends React.Component<{}, State> {
     state = {
         barData: {}, image1: [], image2: [],
     }
@@ -53,18 +48,18 @@ export default class ChartsPair5Algorithms extends React.Component<Props, State>
                     </ChartContainer>
                     <InputContainer>
                         <span>Wybierz zdjęcia aby podać statystki dla tych dwóch zdjęcia</span>
-                        <Typeahead<any>
+                        <Typeahead<Image>
                             id="image1"
                             labelKey="filename"
-                            onChange={(value: any) => { this.setState({ image1: value }) }}
+                            onChange={(value: Image[]) => { this.setState({ image1: value }) }}
                             options={Utils.getImages(this.state?.image2)}
                             placeholder="Choose a image..."
                         />
 
-                        <Typeahead<any>
+                        <Typeahead<Image>
                             id="image2"
                             labelKey="filename"
-                            onChange={(value: any) => { this.setState({ image2: value }) }}
+                            onChange={(value: Image[]) => { this.setState({ image2: value }) }}
                             options={Utils.getImages(this.state?.image1)}
                             placeholder="Choose a image..."
                         />

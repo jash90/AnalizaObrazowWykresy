@@ -1,11 +1,11 @@
 import React from 'react';
 import { Bar } from "react-chartjs-2";
 import Utils from '../Utils';
-import { observer, inject } from 'mobx-react';
-
+import { observer } from 'mobx-react';
+import Image from '../models/Image';
 interface Props {
-    image1: any
-    image2: any
+    image1: Image[]
+    image2: Image[]
 }
 
 interface State {
@@ -13,7 +13,6 @@ interface State {
 }
 
 @observer
-@inject("appStore")
 export default class ResultPairAlgorithms extends React.Component<Props, State> {
     state = {
         barData: {},
