@@ -258,9 +258,9 @@ export default class Utils {
             '#37474F',
             '#263238',
             '#000000',
-            ];
+        ];
 
-        return Colors[Math.floor(Math.random()*Colors.length)];
+        return Colors[Math.floor(Math.random() * Colors.length)];
     }
 
     public static generateArrayRandomColor(number: number) {
@@ -272,4 +272,34 @@ export default class Utils {
         }
         return array;
     }
+
+    public static calculateDataToCharts(algorithms: any, compares: any, slice = false) {
+        var allCompares = compares.filter((compare: any) => compare.versionAlgorithmId === '1').length;
+
+        const algorithmsCorrects = Utils.calculateAlgorithmsCorrects(algorithms, compares);
+
+        var filteredAlgorithms = algorithmsCorrects.map(algorithm => { return { correct: algorithm.correct, name: algorithm.name } }).sort((a, b) => { return b.correct - a.correct });
+
+        if (slice)
+            filteredAlgorithms = filteredAlgorithms.slice(0, 5);
+
+        const labels = filteredAlgorithms.map(algorithm => algorithm.name);
+        const corrects = filteredAlgorithms.map(algorithm => { return ((algorithm.correct / allCompares) * 100).toFixed(2) });
+
+        return { labels, corrects };
+    }
+
+    public static calculateAlgorithmsCorrects(algorithms: any, compares: any) {
+        let algorithmsCorrects = [];
+
+        for (let i = 0; i < algorithms.length; i++) {
+            const algorithm = algorithms[i];
+            const algorithmCompares = compares.filter((compare: any) => compare.versionAlgorithmId === algorithm.id);
+            const correct = algorithmCompares.filter((compare: any) => compare.correct === true).length;
+            const incorrect = algorithmCompares.filter((compare: any) => compare.correct === false).length;
+            algorithmsCorrects.push({ name: algorithm.name, correct, incorrect });
+        }
+        return algorithmsCorrects;
+    }
+
 }

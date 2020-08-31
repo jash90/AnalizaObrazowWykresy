@@ -4,17 +4,7 @@ export class AppStore {
     algorithms = observable([]);
     compares = observable([]);
     images = observable([]);
-
-    chartsCorrectness: any[] = observable([]);
-
-    @observable
-    chartsPairAlgorithms: any;
-
-    @observable
-    chartsPair5Algorithms: any;
-
-    @observable
-    pairPhotosAlgorithms: any;
+    similarities = observable([]);
 
     @action
     setAlgorithms(algorithms: any) {
@@ -29,6 +19,11 @@ export class AppStore {
     @action
     setCompares(compares: any) {
         this.compares = compares;
+    }
+
+    @action
+    setSimilarities(similarities: any) {
+        this.similarities = similarities;
     }
 }
 

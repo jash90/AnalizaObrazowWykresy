@@ -4,12 +4,28 @@ import axios from "axios";
 import Utils from '../Utils';
 import { observer, inject } from 'mobx-react';
 import { AppStore } from '../stores/AppStore';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
+
+interface Props {
+    appStore: AppStore
+}
+
+interface State {
+    barData: any
+    images: any[]
+    images1: any[]
+    images2: any[]
+    image1: string
+    image2: string
+}
 
 @observer
 @inject("appStore")
-export default class ChartsPair5Algorithms extends React.Component<{appStore: AppStore}, { barData: {} }> {
+export default class ChartsPair5Algorithms extends React.Component<Props, State> {
     state = {
-        barData: {}
+        barData: {}, images: [], images1: [], images2: [], image1: "", image2: "",
     }
 
 
@@ -17,25 +33,7 @@ export default class ChartsPair5Algorithms extends React.Component<{appStore: Ap
         const compares: any[] = this.props.appStore.compares;
         const algorithms: any[] = this.props.appStore.algorithms;
 
-        let algorithmsCorrects = [];
-        var allCompares = 0;
-
-        for (let i = 0; i < algorithms.length; i++) {
-            const algorithm = algorithms[i];
-            const algorithmCompares = compares.filter(compare => compare.versionAlgorithmId === algorithm.id);
-            const correct = algorithmCompares.filter(compare => compare.correct === true).length;
-            const incorrect = algorithmCompares.filter(compare => compare.correct === false).length;
-
-            algorithmsCorrects.push({ name: algorithm.name, correct });
-            allCompares = correct + incorrect;
-        }
-
-        const filteredAlgorithms = algorithmsCorrects.sort((a, b) => { return b.correct - a.correct }).slice(0, 5);
-
-        const labels = filteredAlgorithms.map(algorithm => algorithm.name + ` ${((algorithm.correct / allCompares) * 100).toFixed(2)}%`);
-        const corrects = filteredAlgorithms.map(algorithm => { return ((algorithm.correct / allCompares) * 100).toFixed(2) });
-
-        console.log(labels, corrects);
+        const { labels, corrects } = Utils.calculateDataToCharts(algorithms, compares, true)
 
         const backgroundColors = Utils.generateArrayRandomColor(5);
 
@@ -46,15 +44,35 @@ export default class ChartsPair5Algorithms extends React.Component<{appStore: Ap
                     label: "Poprównanie procentowej 5 najlepszych algorymów",
                     data: corrects,
                     backgroundColor: backgroundColors,
-                    hoverBackgroundColor: backgroundColors.map(color =>color+"99"),
+                    hoverBackgroundColor: backgroundColors.map(color => color + "99"),
                 }]
-            }
+            },
         });
     }
+
     render() {
         return (
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-                <Bar data={this.state.barData} options={{ scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }} />
+                <div style={{ display: "flex", width: "100%", height: 550 }}>
+                    <Bar data={this.state.barData} options={{ maintainAspectRatio: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }} width={1000} height={300} />
+                </div>
+                <div style={{ display: "flex", flexDirection: "row", width: "100%", padding: 10, justifyContent: "space-evenly" }}>
+                    <span>Wybierz zdjęcia aby podać statystki dla tych dwóch zdjęcia</span>
+                    <Autocomplete
+                        id="combo-box-demo"
+                        options={this.props.appStore.images}
+                        getOptionLabel={(option: any) => option.filename}
+                        style={{ width: 300 }}
+                        value={this.state.image1}
+                        onSelect={(e: any) => { this.setState({ image1: e.target.value }); }}
+                        renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
+                    />
+
+                    <span>{this.state.image1}</span>
+
+                </div>
+
+
             </div>
         )
     }

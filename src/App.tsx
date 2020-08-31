@@ -23,6 +23,12 @@ export default class App extends React.Component {
 
     const response2 = await axios.get("http://localhost:3091/algorithms");
     appStore.setAlgorithms(response2.data);
+
+    const response3 = await axios.get("http://localhost:3091/images");
+    appStore.setImages(response3.data);
+
+    const response4 = await axios.get("http://localhost:3091/similarities");
+    appStore.setSimilarities(response4.data);
   }
   render() {
     return (
