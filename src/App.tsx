@@ -39,8 +39,8 @@ export default class App extends React.Component {
             </Header>
             <Navigation>
               <ButtonLink to="/wykresy-poprawnosci" >Wykresy poprawności</ButtonLink>
-              <ButtonLink to="/wykresy-podobienstwa-par-zdjec-algorytmow">Procentowe podobieństwo dla wybranej pary obrazów wg algorytmy 45</ButtonLink>
-              <ButtonLink to="/wykresy-podobienstwa-par-zdjec-5-najlepszych-algorytmow">Procentowe podobieństwo dla wybranej pary obrazów wg 5 najlepszych</ButtonLink>
+              <ButtonLink to="/wykresy-podobienstwa-par-zdjec-algorytmow">Porównanie procentowej poprawności wszystkich algorytmów</ButtonLink>
+              <ButtonLink to="/wykresy-podobienstwa-par-zdjec-5-najlepszych-algorytmow">Porównanie procentowej poprawności dla 5 najlepszych</ButtonLink>
               <ButtonLink to="/pary-zdjec-algorytmow">Wyświetlenie par zdjęć dla danych algorytmów</ButtonLink>
             </Navigation>
             <Switch>
