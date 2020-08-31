@@ -1,7 +1,17 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+`;
+
+const ContainerColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
 `;
 
 const Header = styled.div`
@@ -28,4 +38,19 @@ const Navigation = styled.div`
     width: 100%;
 `;
 
-export {Container, Header, Title, Navigation};
+const ChartContainer = styled.div`
+    display: flex;
+    width: 100%;
+    height: 550px;
+`;
+
+const InputContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%; 
+    padding: 10px; 
+    justify-content: space-evenly;
+    align-items: center;
+`;
+
+export { Container, ContainerColumn, Header, Title, Navigation, ChartContainer, InputContainer };

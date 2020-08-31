@@ -4,9 +4,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
-import { Header, Title, Container, Navigation } from "./components/StyledComponents";
+import { Header, Title, Navigation } from "./components/StyledComponents";
 import { ButtonLink } from './components/ButtonLink';
 import ChartsCorrectness from './views/ChartsCorrectness';
 import PairPhotosAlgorithms from './views/PairPhotosAlgorithms';
@@ -34,7 +33,7 @@ export default class App extends React.Component {
     return (
       <Router>
         <Provider {...{ appStore }}>
-          <Container>
+          <>
             <Header>
               <Title>Wykresy Sławomir Frydrych</Title>
             </Header>
@@ -50,7 +49,7 @@ export default class App extends React.Component {
               <Route path="/wykresy-podobienstwa-par-zdjec-5-najlepszych-algorytmow" component={ChartPair5Algorithms} />
               <Route path="/wykresy-podobienstwa-par-zdjec-algorytmow" component={ChartsPairAlgorithms} />
             </Switch>
-          </Container>
+          </>
         </Provider>
       </Router>
     );

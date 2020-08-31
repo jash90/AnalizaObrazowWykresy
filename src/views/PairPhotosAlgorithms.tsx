@@ -1,8 +1,22 @@
 import React from 'react';
-import { Pie } from "react-chartjs-2";
-import axios from "axios";
 import { observer, inject } from 'mobx-react';
 import { AppStore } from '../stores/AppStore';
+import { Container, ContainerColumn } from '../components/StyledComponents';
+import Utils from '../Utils';
+import styled from 'styled-components';
+
+const Title = styled.span<{ similarity: number }>`
+    color: ${props => props.similarity >= 50 ? "#1B5E20" : "black"};
+    font-weight: ${props => props.similarity >= 50 ? "bold" : "normal"};
+    padding: 10px;
+    width: 250px;
+`;
+
+const Img = styled.img<{ image: any }>`
+   width:${props =>props.image.width}px; 
+   height:${props =>props.image.height}px; 
+   padding: 10px;
+`;
 
 @observer
 @inject("appStore")
@@ -13,55 +27,34 @@ export default class PairPhotosAlgorithms extends React.Component<{ appStore: Ap
 
 
     async componentDidMount() {
-        const images: any[] = this.props.appStore.images;
-        const algorithms: any[] = this.props.appStore.algorithms;
-        var compares: any[] = this.props.appStore.compares;
-        var similarities: any[] = this.props.appStore.similarities;
-
-        similarities = similarities.map(similarity => {
-            const image = images.find(image => image.id === similarity.imageId);
-            const secondImage = images.find(image => image.id === similarity.secondImageId);
-            compares = compares.filter((compare: any) => {
-                return (compare.imageId === similarity.imageId || compare.imageId === similarity.secondImageId) && (compare.secondImageId === similarity.imageId || compare.secondImageId === similarity.secondImageId)
-            }).map((compare: any) => {
-                const algorithm = algorithms.find(algorithm => algorithm.id === compare.versionAlgorithmId);
-                return { ...compare, algorithm }
-            })
-
-            return { ...similarity, image, secondImage, compares }
-        });
-
-        this.setState({ similarities });
-
+        this.setState({ similarities: Utils.getSimilaritiesResult() });
     }
     render() {
-        return (<div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        return (<ContainerColumn>
             {this.state.similarities.map((similarity: any, index: number) => {
                 const { image, secondImage } = similarity;
-                console.log(image.path, secondImage.path);
                 const img1 = require(`../${image.path}`);
                 const img2 = require(`../${secondImage.path}`);
-                console.log(similarity);
                 return (
-                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-                            <img key={"a" + index} src={img1} width={image.width} height={image.height} style={{ padding: 10 }} />
-                            <img key={"b" + index} src={img2} width={secondImage.width} height={secondImage.height} style={{ padding: 10 }} />
-                        </div>
+                    <ContainerColumn>
+                        <Container>
+                            <Img key={"a" + index} src={img1} image={image} alt={image.filename} />
+                            <Img key={"b" + index} src={img2} image={secondImage} alt={secondImage.filename} />
+                        </Container>
 
-                        <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
+                        <Container>
                             {similarity.compares.map((compare: any, index: number) => {
                                 return (
-                                    <span style={{ padding: 10, width: 250, color: compare.similarity >= 50 ? "#1B5E20" : "black", fontWeight: compare.similarity >= 50 ? "bold" : "normal", }}>
+                                    <Title similarity={compare.similarity}>
                                         {`${compare.algorithm.name} ${compare.similarity}%`}
-                                    </span>
+                                    </Title>
                                 )
                             })}
-                        </div>
-                    </div>
+                        </Container>
+                    </ContainerColumn>
                 )
             })}
-        </div>)
+        </ContainerColumn>)
     }
 }
 

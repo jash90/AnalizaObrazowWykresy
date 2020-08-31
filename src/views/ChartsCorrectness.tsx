@@ -3,6 +3,14 @@ import { Pie } from "react-chartjs-2";
 import { observer, inject, } from 'mobx-react';
 import { AppStore } from '../stores/AppStore';
 import Utils from '../Utils';
+import { Container } from '../components/StyledComponents';
+import styled from 'styled-components';
+
+const PieContainer = styled.div`
+    width: 200px;
+    height: 200px; 
+    padding: 20px;
+`;
 
 @observer
 @inject("appStore")
@@ -13,13 +21,10 @@ export default class WykresyPoprawnosci extends React.Component<{ appStore: AppS
 
 
     async componentDidMount() {
-        console.log(this.props.appStore);
-        const compares: any[] = this.props.appStore.compares;
-        const algorithms: any[] = this.props.appStore.algorithms;
-
+        
         var pieData: any[] = [];
 
-        const algorithmsCompares = Utils.calculateAlgorithmsCorrects(algorithms, compares);
+        const algorithmsCompares = Utils.calculateAlgorithmsCorrects();
 
         pieData = algorithmsCompares.map((algorithm: any) => {
             const { correct, incorrect, name } = algorithm;
@@ -45,21 +50,19 @@ export default class WykresyPoprawnosci extends React.Component<{ appStore: AppS
 
             const options = { title: { text: name, display: true, position: "top", fontSize: 20 } }
             return { data, options };
-        })
-
-
+        });
 
         this.setState({ pieData });
 
     }
     render() {
-        return (<div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
+        return (<Container>
             {this.state.pieData.map((props, index) => {
-                return (<div key={index.toString()} style={{ width: 200, height: 200, padding: 20 }}>
+                return (<PieContainer key={index.toString()} >
                     <Pie key={index.toString()} {...props} width={200} height={200} />
-                </div>)
+                </PieContainer>)
             })}
-        </div>)
+        </Container>)
     }
 }
 

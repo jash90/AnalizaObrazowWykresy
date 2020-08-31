@@ -17,7 +17,7 @@ const Button = styled.button`
     }
 `;
 
-const linkStyle = { textDecoration: "none", color: "black", justifyContent: "center", };
+const linkStyle = { textDecoration: "none", color: "black", justifyContent: "center", height:"100%", padding:10 };
 
 export const ButtonLink: React.FC<LinkProps> = (props: LinkProps) => {
     return (

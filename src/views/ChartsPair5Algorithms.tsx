@@ -1,12 +1,11 @@
 import React from 'react';
 import { Bar } from "react-chartjs-2";
-import axios from "axios";
 import Utils from '../Utils';
 import { observer, inject } from 'mobx-react';
 import { AppStore } from '../stores/AppStore';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-
+import { Typeahead } from 'react-bootstrap-typeahead';
+import ResultPair5Algorithms from '../components/ResultPair5Algorithms';
+import { ChartContainer, Container, InputContainer } from '../components/StyledComponents';
 
 interface Props {
     appStore: AppStore
@@ -14,26 +13,21 @@ interface Props {
 
 interface State {
     barData: any
-    images: any[]
-    images1: any[]
-    images2: any[]
-    image1: string
-    image2: string
+    image1: any[]
+    image2: any[]
 }
 
 @observer
 @inject("appStore")
 export default class ChartsPair5Algorithms extends React.Component<Props, State> {
     state = {
-        barData: {}, images: [], images1: [], images2: [], image1: "", image2: "",
+        barData: {}, image1: [], image2: [],
     }
 
 
     async componentDidMount() {
-        const compares: any[] = this.props.appStore.compares;
-        const algorithms: any[] = this.props.appStore.algorithms;
 
-        const { labels, corrects } = Utils.calculateDataToCharts(algorithms, compares, true)
+        const { labels, corrects } = Utils.calculateDataToCharts(true);
 
         const backgroundColors = Utils.generateArrayRandomColor(5);
 
@@ -41,7 +35,7 @@ export default class ChartsPair5Algorithms extends React.Component<Props, State>
             barData: {
                 labels,
                 datasets: [{
-                    label: "Poprównanie procentowej 5 najlepszych algorymów",
+                    label: "Porównanie procentowej poprawności 5 najlepszych algorytmów",
                     data: corrects,
                     backgroundColor: backgroundColors,
                     hoverBackgroundColor: backgroundColors.map(color => color + "99"),
@@ -52,28 +46,34 @@ export default class ChartsPair5Algorithms extends React.Component<Props, State>
 
     render() {
         return (
-            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-                <div style={{ display: "flex", width: "100%", height: 550 }}>
-                    <Bar data={this.state.barData} options={{ maintainAspectRatio: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }} width={1000} height={300} />
-                </div>
-                <div style={{ display: "flex", flexDirection: "row", width: "100%", padding: 10, justifyContent: "space-evenly" }}>
-                    <span>Wybierz zdjęcia aby podać statystki dla tych dwóch zdjęcia</span>
-                    <Autocomplete
-                        id="combo-box-demo"
-                        options={this.props.appStore.images}
-                        getOptionLabel={(option: any) => option.filename}
-                        style={{ width: 300 }}
-                        value={this.state.image1}
-                        onSelect={(e: any) => { this.setState({ image1: e.target.value }); }}
-                        renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
-                    />
+            <React.Fragment>
+                <Container>
+                    <ChartContainer>
+                        <Bar data={this.state.barData} options={{ maintainAspectRatio: false, scales: { yAxes: [{ ticks: { beginAtZero: true } }] } }} width={1000} height={300} />
+                    </ChartContainer>
+                    <InputContainer>
+                        <span>Wybierz zdjęcia aby podać statystki dla tych dwóch zdjęcia</span>
+                        <Typeahead<any>
+                            id="image1"
+                            labelKey="filename"
+                            onChange={(value: any) => { this.setState({ image1: value }) }}
+                            options={Utils.getImages(this.state?.image2)}
+                            placeholder="Choose a image..."
+                        />
 
-                    <span>{this.state.image1}</span>
-
-                </div>
-
-
-            </div>
+                        <Typeahead<any>
+                            id="image2"
+                            labelKey="filename"
+                            onChange={(value: any) => { this.setState({ image2: value }) }}
+                            options={Utils.getImages(this.state?.image1)}
+                            placeholder="Choose a image..."
+                        />
+                    </InputContainer>
+                    <ChartContainer>
+                        {!!this.state.image1.length && !!this.state.image2.length && <ResultPair5Algorithms image1={this.state.image1} image2={this.state.image2} />}
+                    </ChartContainer>
+                </Container>
+            </React.Fragment>
         )
     }
 }
