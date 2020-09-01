@@ -13,21 +13,26 @@ import ChartPair5Algorithms from './views/ChartsPair5Algorithms';
 import ChartsPairAlgorithms from './views/ChartsPairAlgorithms';
 import { Provider } from "mobx-react";
 import appStore from "./stores/AppStore"
-import axios from "axios";
+import { Axios } from "./Axios";
 
 export default class App extends React.Component {
   async componentDidMount() {
-    const response1 = await axios.get("http://localhost:3091/compares");
-    appStore.setCompares(response1.data);
+    try {
+      const response1 = await Axios.get("compares");
+      appStore.setCompares(response1.data);
 
-    const response2 = await axios.get("http://localhost:3091/algorithms");
-    appStore.setAlgorithms(response2.data);
+      const response2 = await Axios.get("algorithms");
+      appStore.setAlgorithms(response2.data);
 
-    const response3 = await axios.get("http://localhost:3091/images");
-    appStore.setImages(response3.data);
+      const response3 = await Axios.get("images");
+      appStore.setImages(response3.data);
 
-    const response4 = await axios.get("http://localhost:3091/similarities");
-    appStore.setSimilarities(response4.data);
+      const response4 = await Axios.get("similarities");
+      appStore.setSimilarities(response4.data);
+    } catch (error) {
+      console.log(error);
+    }
+
   }
   render() {
     return (
