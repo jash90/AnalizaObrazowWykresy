@@ -21,9 +21,9 @@ export default class ResultPairAlgorithms extends React.Component<Props, State> 
 
     render() {
 
-        const {image1, image2} = this.props;
+        const { image1, image2 } = this.props;
 
-        const backgroundColors = Utils.generateArrayRandomColor(45);
+        const backgroundColors: string[] = Utils.generateArrayRandomColor(45);
 
         const { labels, similarities } = Utils.calculateChartsPairAlgorithms(image1, image2);
 
@@ -39,7 +39,7 @@ export default class ResultPairAlgorithms extends React.Component<Props, State> 
         };
 
         return (
-            <Bar data={barData} options={{ maintainAspectRatio: false, scales: { yAxes: [{ ticks: { beginAtZero: true, suggestedMax:100 } }] } }} width={1000} height={300} />
+            <Bar data={barData} options={{ maintainAspectRatio: false, scales: { yAxes: [{ ticks: { beginAtZero: true, suggestedMax: 100 } }] } }} width={1000} height={300} />
         )
     }
 }

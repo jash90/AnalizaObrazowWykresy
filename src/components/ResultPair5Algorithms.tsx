@@ -23,7 +23,7 @@ export default class ResultPair5Algorithms extends React.Component<Props, State>
 
         const {image1, image2} = this.props;
 
-        const backgroundColors = Utils.generateArrayRandomColor(5);
+        const backgroundColors: string[] = Utils.generateArrayRandomColor(5);
 
         const { labels, similarities } = Utils.calculateChartsPairAlgorithms(image1, image2, true);
 

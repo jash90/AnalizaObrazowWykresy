@@ -57,7 +57,7 @@ export default class WykresyPoprawnosci extends React.Component<{}, State> {
     }
     render() {
         return (<Container>
-            {this.state.pieData.map((props, index) => {
+            {this.state.pieData.map((props:any, index:number) => {
                 return (<PieContainer key={index.toString()} >
                     <Pie key={index.toString()} {...props} width={200} height={200} />
                 </PieContainer>)
