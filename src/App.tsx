@@ -45,13 +45,13 @@ export default class App extends React.Component {
             <Navigation>
               <ButtonLink to="/wykresy-poprawnosci" >Wykresy poprawności</ButtonLink>
               <ButtonLink to="/wykresy-podobienstwa-par-zdjec-algorytmow">Porównanie procentowej poprawności wszystkich algorytmów</ButtonLink>
-              <ButtonLink to="/wykresy-podobienstwa-par-zdjec-5-najlepszych-algorytmow">Porównanie procentowej poprawności dla 5 najlepszych</ButtonLink>
+              <ButtonLink to="/wykresy-podobienstwa-par-zdjec-najlepszych-najlepszych-algorytmow">Porównanie procentowej poprawności dla 5 najlepszych</ButtonLink>
               <ButtonLink to="/pary-zdjec-algorytmow">Wyświetlenie par zdjęć dla danych algorytmów</ButtonLink>
             </Navigation>
             <Switch>
               <Route path="/wykresy-poprawnosci" component={ChartsCorrectness} />
               <Route path="/pary-zdjec-algorytmow" component={PairPhotosAlgorithms} />
-              <Route path="/wykresy-podobienstwa-par-zdjec-5-najlepszych-algorytmow" component={ChartPairBestAlgorithms} />
+              <Route path="/wykresy-podobienstwa-par-zdjec-najlepszych-najlepszych-algorytmow" component={ChartPairBestAlgorithms} />
               <Route path="/wykresy-podobienstwa-par-zdjec-algorytmow" component={ChartsPairAlgorithms} />
             </Switch>
           </>

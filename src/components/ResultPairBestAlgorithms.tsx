@@ -32,7 +32,7 @@ export default class ResultPair5Algorithms extends React.Component<Props, State>
         const barData = {
             labels,
             datasets: [{
-                label: `Porównanie podobieństwa dwóch obrazów ${image1[0].filename} i ${image2[0].filename} wg 5 najlepszych algorytmów`,
+                label: `Porównanie podobieństwa dwóch obrazów ${image1[0].filename} i ${image2[0].filename} wg ${countAlgorithms} najlepszych algorytmów`,
                 data: similarities,
                 backgroundColor: backgroundColors,
                 hoverBackgroundColor: backgroundColors.map(color => color + "99")

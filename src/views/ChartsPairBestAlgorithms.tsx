@@ -31,7 +31,7 @@ export default class ChartsPairBestAlgorithms extends React.Component<{}, State>
             barData: {
                 labels,
                 datasets: [{
-                    label: "Porównanie procentowej poprawności 5 najlepszych algorytmów",
+                    label: `Porównanie procentowej poprawności ${this.state.countAlgorithms} najlepszych algorytmów`,
                     data: corrects,
                     backgroundColor: backgroundColors,
                     hoverBackgroundColor: backgroundColors.map(color => color + "99"),
