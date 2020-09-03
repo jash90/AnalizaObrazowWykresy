@@ -9,7 +9,7 @@ import { Header, Title, Navigation } from "./components/StyledComponents";
 import { ButtonLink } from './components/ButtonLink';
 import ChartsCorrectness from './views/ChartsCorrectness';
 import PairPhotosAlgorithms from './views/PairPhotosAlgorithms';
-import ChartPair5Algorithms from './views/ChartsPair5Algorithms';
+import ChartPairBestAlgorithms from './views/ChartsPairBestAlgorithms';
 import ChartsPairAlgorithms from './views/ChartsPairAlgorithms';
 import { Provider } from "mobx-react";
 import appStore from "./stores/AppStore"
@@ -51,7 +51,7 @@ export default class App extends React.Component {
             <Switch>
               <Route path="/wykresy-poprawnosci" component={ChartsCorrectness} />
               <Route path="/pary-zdjec-algorytmow" component={PairPhotosAlgorithms} />
-              <Route path="/wykresy-podobienstwa-par-zdjec-5-najlepszych-algorytmow" component={ChartPair5Algorithms} />
+              <Route path="/wykresy-podobienstwa-par-zdjec-5-najlepszych-algorytmow" component={ChartPairBestAlgorithms} />
               <Route path="/wykresy-podobienstwa-par-zdjec-algorytmow" component={ChartsPairAlgorithms} />
             </Switch>
           </>

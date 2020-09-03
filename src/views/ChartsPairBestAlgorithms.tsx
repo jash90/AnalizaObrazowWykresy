@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2";
 import Utils from '../Utils';
 import { observer } from 'mobx-react';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import ResultPair5Algorithms from '../components/ResultPair5Algorithms';
+import ResultPairBestAlgorithms from '../components/ResultPairBestAlgorithms';
 import { ChartContainer, Container, InputContainer } from '../components/StyledComponents';
 import Image from '../models/Image';
 
@@ -11,20 +11,21 @@ interface State {
     barData: any
     image1: Image[]
     image2: Image[]
+    countAlgorithms: number
 }
 
 @observer
-export default class ChartsPair5Algorithms extends React.Component<{}, State> {
+export default class ChartsPairBestAlgorithms extends React.Component<{}, State> {
     state = {
-        barData: {}, image1: [], image2: [],
+        barData: {}, image1: [], image2: [], countAlgorithms: 10
     }
 
 
     async componentDidMount() {
 
-        const { labels, corrects } = Utils.calculateDataToCharts(true);
+        const { labels, corrects } = Utils.calculateDataToCharts(this.state.countAlgorithms);
 
-        const backgroundColors = Utils.generateArrayRandomColor(5);
+        const backgroundColors = Utils.generateArrayRandomColor(this.state.countAlgorithms);
 
         this.setState({
             barData: {
@@ -65,7 +66,7 @@ export default class ChartsPair5Algorithms extends React.Component<{}, State> {
                         />
                     </InputContainer>
                     <ChartContainer>
-                        {!!this.state.image1.length && !!this.state.image2.length && <ResultPair5Algorithms image1={this.state.image1} image2={this.state.image2} />}
+                        {!!this.state.image1.length && !!this.state.image2.length && <ResultPairBestAlgorithms image1={this.state.image1} image2={this.state.image2} countAlgorithms={this.state.countAlgorithms} />}
                     </ChartContainer>
                 </Container>
             </React.Fragment>

@@ -6,6 +6,7 @@ import Image from '../models/Image';
 interface Props {
     image1: Image[]
     image2: Image[]
+    countAlgorithms:number
 }
 
 interface State {
@@ -21,11 +22,11 @@ export default class ResultPair5Algorithms extends React.Component<Props, State>
 
     render() {
 
-        const {image1, image2} = this.props;
+        const {image1, image2, countAlgorithms} = this.props;
 
-        const backgroundColors: string[] = Utils.generateArrayRandomColor(5);
+        const backgroundColors: string[] = Utils.generateArrayRandomColor(countAlgorithms);
 
-        const { labels, similarities } = Utils.calculateChartsPairAlgorithms(image1, image2, true);
+        const { labels, similarities } = Utils.calculateChartsPairAlgorithms(image1, image2, countAlgorithms);
 
 
         const barData = {

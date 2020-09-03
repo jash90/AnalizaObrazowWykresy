@@ -292,7 +292,7 @@ export default class Utils {
         return algorithmsCorrects;
     }
 
-    public static calculateDataToCharts(slice: boolean = false) {
+    public static calculateDataToCharts(countAlgorithms: number = 0) {
         const { compares } = appStore;
 
         var allCompares: number = compares.filter((compare: Compare) => compare.versionAlgorithmId === '1').length;
@@ -301,8 +301,8 @@ export default class Utils {
 
         var filteredAlgorithms: any[] = algorithmsCorrects.map((algorithm: any) => { return { correct: algorithm.correct, name: algorithm.name } }).sort((a, b) => { return b.correct - a.correct });
 
-        if (slice)
-            filteredAlgorithms = filteredAlgorithms.slice(0, 5);
+        if (countAlgorithms > 0)
+            filteredAlgorithms = filteredAlgorithms.slice(0, countAlgorithms);
 
         const labels: string[] = filteredAlgorithms.map((algorithm: any) => algorithm.name);
         const corrects: string[] = filteredAlgorithms.map((algorithm: any) => { return ((algorithm.correct / allCompares) * 100).toFixed(2) });
@@ -310,14 +310,14 @@ export default class Utils {
         return { labels, corrects };
     }
 
-    public static calculateChartsPairAlgorithms(image1: Image[], image2: Image[], slice: boolean = false) {
+    public static calculateChartsPairAlgorithms(image1: Image[], image2: Image[], countAlgorithms: number = 0) {
         if (image1.length > 0 && image2.length > 0) {
 
             var img1: Image = image1[0];
 
             var img2: Image = image2[0];
 
-            const algorithmsLabels: any = Utils.calculateDataToCharts(slice);
+            const algorithmsLabels: any = Utils.calculateDataToCharts(countAlgorithms);
 
             const algorithmsIds: string[] = algorithmsLabels.labels.map((algorithm: string) => {
                 const alm: Algorithm | undefined = appStore.algorithms.find((am: Algorithm) => {
